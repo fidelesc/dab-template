@@ -1,2 +1,29 @@
-# daab-template
-Template for a Databricks Asset Bundles
+# Custom Databricks Asset Bundle Template for Databricks environments
+
+This repository provides a custom Databricks Asset Bundle template to quickly bootstrap new Databricks projects. By using this template, you can initialize projects directly from this GitHub repository, allowing you to start development with standardized configurations and folder structures.
+
+## Usage
+
+### Prerequisites
+
+Ensure you have the [Databricks CLI](https://docs.databricks.com/dev-tools/cli/index.html) installed and configured. You'll need access to Databricks and this repository to initialize projects from the template.
+
+### Initializing a New Project from This Template
+
+To create a new Databricks bundle project from this template, follow the steps below. This guide shows how to initialize a project directly from GitHub, without needing to clone this repository manually.
+
+#### Initialize the Project
+
+To use the template from GitHub, run the following commands in your terminal:
+
+bash
+# Create a new directory for your project
+mkdir my_new_project
+cd my_new_project
+
+# Initialize the project using the main template
+databricks bundle init https://github.com/LucasFideles/dab-template.git
+
+### Updating the Template
+
+To keep the template up to date, simply update this GitHub repository. Any new projects initialized afterward will automatically use the latest version.
