@@ -1,66 +1,41 @@
-# This is a Databricks asset bundle definition for {{.project_name}}.
-# See https://docs.databricks.com/dev-tools/bundles/index.html for documentation.
-bundle:
-  name: {{.project_name}}
+# The main job for {{.project_name}}
+  resources:
+    jobs:
+      {{.project_name}}_job:
+        name: {{.project_name}}_job
 
-variables:
-  # Declare a global policy_id variable. This ensures it is recognized throughout the bundle.
-  policy_id:
-    type: string
-    description: "The policy ID to use for the job clusters."
-    default: "XX05XX3XX0XX5XX3" #Risk Job Compute for dev environment
+        schedule:
+          quartz_cron_expression: '0 0 8 * * ?'
+          timezone_id: America/Sao_Paulo
 
-include:
-  - resources/*.yml
+        email_notifications:
+            on_failure:
+                - {{.databricks_username}}
 
-targets:
-  # The 'dev' target, used for development purposes.
-  # Whenever a developer deploys using 'dev', they get their own copy.
-  dev:
-    # We use 'mode: development' to make sure everything deployed to this target gets a prefix
-    # like '[dev my_user_name]'. Setting this mode also disables any schedules and
-    # automatic triggers for jobs and enables the 'development' mode for Delta Live Tables pipelines.
-    variables:
-      policy_id: "XX05XX3XX0XX5XX3"  # Job Compute Policy in Development
-    mode: development
-    default: true
-    workspace:
-      host: https://dbc-XXXXXXXX-XXXX.cloud.databricks.com
-      root_path: ~/{{.project_name}}/.bundle/${bundle.name}/${bundle.target}
-    permissions:
-    - user_name: {{.databricks_username}}  # Specify the user name
-      level: CAN_MANAGE
-    - group_name: GROUP-ADMINS  # Specify the group name
-      level: CAN_MANAGE  # Or another permission level, like CAN_RUN or CAN_VIEW
+        tasks:
+          - task_key: task_1
+            job_cluster_key: job_cluster
+            notebook_task:
+              notebook_path: ../src/task_1.py
+              base_parameters:
+                window: 15
 
-  stg:
-    mode: production
-    variables:
-      policy_id: "XX05XX3XX0XX5XX3"  # Job Compute Policy in Staging
-    workspace:
-      host: https://dbc-XXXXXXXX-XXXX.cloud.databricks.com
-      root_path: /Shared/.bundle/${bundle.name}/${bundle.target}
-    run_as:
-      service_principal_name: "XcXXdXXe-0XXe-4XX4-bXX3-cXXbXX2XXcXX"
-    permissions:
-    - user_name: {{.databricks_username}}  # Specify the user name
-      level: CAN_MANAGE
-    - group_name: GROUP-ADMINS  # Specify the group name
-      level: CAN_MANAGE  # Or another permission level, like CAN_RUN or CAN_VIEW
+          - task_key: task_2
+            depends_on:
+                - task_key: task_1
+            job_cluster_key: job_cluster
+            notebook_task:
+              notebook_path: ../src/task_2.py
 
-  # The 'prod' target, used for production deployment.
-  prd:
-    mode: production
-    variables:
-      policy_id: "XX05XX3XX0XX5XX3" # Job Compute in Production
-    workspace:
-      host: https://dbc-XaXX6XXa-5XXf.cloud.databricks.com
-      # We explicitly specify /Users/lucas.fideles@nuvemshop.com.br to make sure we only have a single copy.
-      root_path: /Shared/.bundle/${bundle.name}/${bundle.target}
-    run_as:
-      service_principal_name: "XcXXdXXe-0XXe-4XX4-bXX3-cXXbXX2XXcXX"
-    permissions:
-      - user_name: {{.databricks_username}}  # Specify the user name
-        level: CAN_MANAGE
-      - group_name: GROUP-ADMINS  # Specify the group name
-        level: CAN_MANAGE  # Or another permission level, like CAN_RUN or CAN_VIEW
+        job_clusters:
+          - job_cluster_key: job_cluster
+            new_cluster:
+              policy_id: ${var.policy_id}
+              spark_version: 15.4.x-cpu-ml-scala2.12
+              node_type_id: i3.xlarge
+              aws_attributes:
+                first_on_demand: 1              # Must be at least 1, per policy
+                availability: "SPOT_WITH_FALLBACK"  # Matches the policy fixed value
+              autoscale:
+                  min_workers: 1
+                  max_workers: 1  # Set max_workers to 1 to enforce a single-node cluster
