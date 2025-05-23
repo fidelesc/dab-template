@@ -6,8 +6,24 @@ This repository provides a custom Databricks Asset Bundle template to quickly bo
 
 ### Prerequisites
 
-Ensure you have the [Databricks CLI](https://docs.databricks.com/aws/en/dev-tools/cli/install) installed and configured. You'll need access to Databricks and this repository to initialize projects from the template.
+Ensure that you have the [Databricks CLI](https://docs.databricks.com/aws/en/dev-tools/cli/install) installed and configured. You will need access to both Databricks and this repository to initialize projects from the template.
 
+In Visual Studio Code, make sure the [Databricks extension](https://marketplace.visualstudio.com/items?itemName=databricks.databricks) is also installed.
+
+Once both tools are installed, configure the Databricks CLI by running:
+
+```bash
+databricks configure
+```
+
+You will be prompted to enter your Databricks host URL (e.g., `https://dbc-12a12a12a1-1212.cloud.databricks.com/`) and a personal access token.
+
+To generate a personal access token:
+
+1. Open your Databricks workspace.
+2. Click your profile icon in the top right corner.
+3. Navigate to **Developer Settings**.
+4. Create a new personal access token.
 
 ### Initializing a New Project from This Template
 
