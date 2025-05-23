@@ -6,7 +6,7 @@ This repository provides a custom Databricks Asset Bundle template to quickly bo
 
 ### Prerequisites
 
-Ensure you have the [Databricks CLI](https://docs.databricks.com/dev-tools/cli/index.html) installed and configured. You'll need access to Databricks and this repository to initialize projects from the template.
+Ensure you have the [Databricks CLI]([https://docs.databricks.com/dev-tools/cli/index.html](https://docs.databricks.com/aws/en/dev-tools/cli/install)) installed and configured. You'll need access to Databricks and this repository to initialize projects from the template.
 
 ### Initializing a New Project from This Template
 
@@ -18,11 +18,13 @@ To use the template from GitHub, run the following commands in your terminal:
 
 bash
 # Create a new directory for your project
+
 mkdir my_new_project
+
 cd my_new_project
 
 # Initialize the project using the main template
-databricks bundle init https://github.com/LucasFideles/dab-template.git
+databricks bundle init https://github.com/fidelesc/dab-template.git
 
 ### Updating the Template
 
