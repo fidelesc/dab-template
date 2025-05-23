@@ -18,11 +18,13 @@ To use the template from GitHub, run the following commands in your terminal:
 
 bash
 # Create a new directory for your project
+
 mkdir my_new_project
+
 cd my_new_project
 
 # Initialize the project using the main template
-databricks bundle init https://github.com/LucasFideles/dab-template.git
+databricks bundle init https://github.com/fidelesc/dab-template.git
 
 ### Updating the Template
 
